@@ -17,6 +17,6 @@ class FreshworksTool(Tool):
             args=args,
             env=env,
             long_running=long_running,
-            requirements=["slack_sdk"],
+            requirements=["slack_sdk", "requests"],
             mermaid_diagram=mermaid_diagram
         )
