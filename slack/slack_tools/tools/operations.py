@@ -315,8 +315,61 @@ except SlackApiError as e:
     ],
 )
 
+slack_send_message_with_image = SlackTool(
+    name="slack_send_message_with_image",
+    description="Send a message to a Slack channel with an image",
+    content="""
+from slack_sdk import WebClient
+from slack_sdk.errors import SlackApiError
+import os
+
+client = WebClient(token=os.environ['SLACK_API_KEY'])
+
+blocks = [
+    {
+        "type": "section",
+        "text": {
+            "type": "mrkdwn",
+            "text": "*Hey team!*\n\nHere’s an important update:"
+        }
+    },
+    {
+        "type": "image",
+        "image_url": image_url,
+        "alt_text": "Important update image"
+    },
+    {
+        "type": "divider"
+    },
+    {
+        "type": "context",
+        "elements": [
+            {
+                "type": "mrkdwn",
+                "text": "Sent via the awesome *Kubiya* bot."
+            }
+        ]
+    }
+]
+
+try:
+    response = client.chat_postMessage(
+        channel=os.Getenv("SLACK_CHANNEL_ID"),
+        blocks=blocks
+    )
+    print(f"Message sent successfully: {response['ts']}")
+
+except SlackApiError as e:
+    print(f"Error sending message: {e.response['error']}")
+    """,
+    args=[
+        Arg(name="image_url", type="str", description="URL of the image to include in the message", required=True)
+    ],
+)
+
+
 # Register all Slack tools
 for tool in [slack_send_message, slack_upload_file, slack_list_channels, slack_create_channel, 
              slack_invite_user, slack_get_channel_history, slack_update_message, slack_delete_message, 
-             slack_add_reaction, slack_remove_reaction, slack_search_messages]:
+             slack_add_reaction, slack_remove_reaction, slack_search_messages, slack_send_message_with_image]:
     tool_registry.register("slack", tool)

@@ -5,6 +5,12 @@ from .operations import (
     slack_create_channel,
     slack_invite_user,
     slack_get_channel_history,
+    slack_update_message,
+    slack_delete_message,
+    slack_add_reaction,
+    slack_remove_reaction,
+    slack_search_messages,
+    slack_send_message_with_image
 )
 
 __all__ = [
@@ -14,4 +20,10 @@ __all__ = [
     'slack_create_channel',
     'slack_invite_user',
     'slack_get_channel_history',
+    'slack_update_message',
+    'slack_delete_message',
+    'slack_add_reaction',
+    'slack_remove_reaction',
+    'slack_search_messages',
+    'slack_send_message_with_image'
 ]
