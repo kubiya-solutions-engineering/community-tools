@@ -125,35 +125,6 @@ except SlackApiError as e:
     ]
 )
 
-slack_get_channel_history = SlackTool(
-    name="slack_get_channel_history",
-    description="Get the message history of a Slack channel",
-    content="""
-from slack_sdk import WebClient
-from slack_sdk.errors import SlackApiError
-import os
-
-client = WebClient(token=os.environ['SLACK_API_KEY'])
-
-try:
-    response = client.conversations_history(
-        channel=channel_id,
-        limit=limit
-    )
-    messages = response['messages']
-    for msg in messages[:10]:  # Limit output to 10 messages
-        print(f"[{msg['ts']}] {msg.get('text', 'No text')[:50]}...")  # Truncate long messages
-    if len(messages) > 10:
-        print(f"... and {len(messages) - 10} more messages")
-except SlackApiError as e:
-    print(f"Error getting channel history: {e}")
-    """,
-    args=[
-        Arg(name="channel_id", type="str", description="ID of the channel to get history from", required=True),
-        Arg(name="limit", type="int", description="Maximum number of messages to retrieve", required=False, default=100),
-    ]
-)
-
 slack_update_message = SlackTool(
     name="slack_update_message",
     description="Update an existing Slack message",
@@ -260,36 +231,6 @@ except SlackApiError as e:
     ],
 )
 
-slack_search_messages = SlackTool(
-    name="slack_search_messages",
-    description="Search for Slack messages",
-    content="""
-from slack_sdk import WebClient
-from slack_sdk.errors import SlackApiError
-import os
-
-client = WebClient(token=os.environ['SLACK_API_KEY'])
-
-try:
-    response = client.search_messages(
-        query=query,
-        count=count
-    )
-    messages = response['messages']['matches']
-    for msg in messages:
-        print(f"Message: {msg['text']}")
-        print(f"Channel: {msg['channel']['name']}")
-        print(f"Timestamp: {msg['ts']}")
-        print("---")
-except SlackApiError as e:
-    print(f"Error searching messages: {e}")
-    """,
-    args=[
-        Arg(name="query", type="str", description="Search query", required=True),
-        Arg(name="count", type="int", description="Number of results to return", required=False, default=20),
-    ],
-)
-
 slack_send_message_with_image = SlackTool(
     name="slack_send_message_with_image",
     description="Send a message to a Slack channel with an image",
@@ -345,6 +286,6 @@ except SlackApiError as e:
 
 # Register all Slack tools
 for tool in [slack_send_message, slack_upload_file, slack_list_channels, 
-             slack_invite_user, slack_get_channel_history, slack_update_message, slack_delete_message, 
-             slack_add_reaction, slack_remove_reaction, slack_search_messages, slack_send_message_with_image]:
+             slack_invite_user, slack_update_message, slack_delete_message, 
+             slack_add_reaction, slack_remove_reaction, slack_send_message_with_image]:
     tool_registry.register("slack", tool)
