@@ -1,0 +1,3 @@
+kubiya-sdk
+slack_sdk
+requests
