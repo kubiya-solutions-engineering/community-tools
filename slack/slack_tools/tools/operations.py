@@ -100,31 +100,6 @@ except SlackApiError as e:
     args=[]
 )
 
-slack_create_channel = SlackTool(
-    name="slack_create_channel",
-    description="Create a new Slack channel",
-    content="""
-from slack_sdk import WebClient
-from slack_sdk.errors import SlackApiError
-import os
-
-client = WebClient(token=os.environ['SLACK_API_KEY'])
-
-try:
-    response = client.conversations_create(
-        name=channel_name,
-        is_private=is_private
-    )
-    print(f"Channel created: #{response['channel']['name']} (ID: {response['channel']['id']})")
-except SlackApiError as e:
-    print(f"Error creating channel: {e}")
-    """,
-    args=[
-        Arg(name="channel_name", type="str", description="Name of the channel to create", required=True),
-        Arg(name="is_private", type="bool", description="Whether the channel should be private", required=False, default=False),
-    ]
-)
-
 slack_invite_user = SlackTool(
     name="slack_invite_user",
     description="Invite a user to a Slack channel",
