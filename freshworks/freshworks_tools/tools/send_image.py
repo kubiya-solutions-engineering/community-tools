@@ -1,6 +1,10 @@
 from kubiya_sdk.tools import Arg
 from .base import FreshworksTool
 from kubiya_sdk.tools.registry import tool_registry
+import slack_sdk
+import requests
+import os
+
 
 slack_send_dashboard_image = FreshworksTool(
     name="slack_send_dashboard_image",
