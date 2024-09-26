@@ -6,7 +6,9 @@ from kubiya_sdk.tools.registry import tool_registry
 slack_send_dashboard_image = FreshworksTool(
     name="slack_send_dashboard_image",
     description="Render a Grafana dashboard and send it as an image to a Slack channel",
-    content="""python -c '
+    content="""
+pip install slack_sdk requests &&
+python -c '
 from slack_sdk import WebClient
 from slack_sdk.errors import SlackApiError
 import requests
@@ -16,11 +18,11 @@ import argparse
 
 def send_dashboard_image_to_slack(grafana_dashboard_url):
     # Initialize Slack client
-    client = WebClient(token=os.environ['SLACK_API_KEY'])
+    client = WebClient(token=os.environ["SLACK_API_KEY"])
 
     # Parse the Grafana dashboard URL to extract UID and slug
     parsed_url = urlparse(grafana_dashboard_url)
-    path_parts = parsed_url.path.strip('/').split('/')
+    path_parts = parsed_url.path.strip("/").split("/")
 
     if "d" in path_parts:
         d_index = path_parts.index("d")
@@ -54,7 +56,7 @@ def send_dashboard_image_to_slack(grafana_dashboard_url):
             file=image_data,
             filename="dashboard.png",
             filetype="png",
-            initial_comment="*Hey team!*\n\nHere’s an important update:",
+            initial_comment="*Hey team!*\n\nHere's an important update:",
             title="Important update image"
         )
         print(f"File uploaded successfully: {response["file"]["id"]}")
