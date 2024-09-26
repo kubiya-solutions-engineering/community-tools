@@ -6,7 +6,7 @@ slack_send_dashboard_image = FreshworksTool(
     name="slack_send_dashboard_image",
     description="Render a Grafana dashboard and send it as an image to a Slack channel",
     content="""
-python -c "from slack_sdk import WebClient
+from slack_sdk import WebClient
 from slack_sdk.errors import SlackApiError
 import requests
 import os
