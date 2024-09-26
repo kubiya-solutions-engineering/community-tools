@@ -11,13 +11,11 @@ class FreshworksTool(Tool):
             name=name,
             description=description,
             icon_url=SLACK_ICON_URL,
-            type="docker",
-            image="python:3.12",
+            type="python",
             content=content,
             args=args,
             env=env,
             secrets=secrets,
-            requirements=["slack_sdk", "requests"],
             long_running=long_running,
             mermaid_diagram=mermaid_diagram
         )
