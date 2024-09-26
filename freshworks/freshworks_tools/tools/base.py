@@ -14,7 +14,7 @@ class FreshworksTool(Tool):
             image="python:3.12",
             content=content,
             args=args,
-            env=env,
+            secrets=env,
             long_running=long_running,
             mermaid_diagram=mermaid_diagram
         )
