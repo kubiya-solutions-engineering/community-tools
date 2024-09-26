@@ -13,7 +13,7 @@ class FreshworksTool(Tool):
             type="python",
             content=content,
             args=args,
-            secrets=env,
+            env=env,
             long_running=long_running,
             mermaid_diagram=mermaid_diagram
         )
