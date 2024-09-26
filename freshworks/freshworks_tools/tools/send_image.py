@@ -16,6 +16,8 @@ import os
 from urllib.parse import urlparse
 import argparse
 
+print(os.getenv("SLACK_API_KEY"))
+
 def send_dashboard_image_to_slack(grafana_dashboard_url):
     # Initialize Slack client
     client = WebClient(token=os.getenv("SLACK_API_KEY"))
