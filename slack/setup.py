@@ -6,6 +6,6 @@ setup(
     packages=find_packages(),
     install_requires=[
         "kubiya-sdk",
-        "slack_sdk",
+        "slack_sdk"
     ],
 )
