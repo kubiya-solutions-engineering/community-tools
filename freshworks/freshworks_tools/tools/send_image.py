@@ -23,7 +23,7 @@ install_git
 
 # Set variables
 REPO_DIR="community-tools"
-REPO_BRANCH="main"  # Change this to the desired branch
+REPO_BRANCH="slackimage"  # Change this to the desired branch
 GIT_ORG="kubiya-solutions-engineering"
 REPO_NAME="community-tools"
 TOOLS_GH_TOKEN="${TOOLS_GH_TOKEN}"  # Ensure this environment variable is set
