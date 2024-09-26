@@ -44,7 +44,7 @@ cd src
 install_dependencies
 
 # Run the Python script
-exec python slack_send_dashboard_image.py
+exec python slack_send_dashboard_image.py --grafana_dashboard_url "{{ .grafana_dashboard_url }}"
 """,
     args=[
         Arg(
