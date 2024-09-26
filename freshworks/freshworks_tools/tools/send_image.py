@@ -18,7 +18,7 @@ import argparse
 
 def send_dashboard_image_to_slack(grafana_dashboard_url):
     # Initialize Slack client
-    client = WebClient(token=os.environ["SLACK_API_KEY"])
+    client = WebClient(token=os.getenv("SLACK_API_KEY"))
 
     # Parse the Grafana dashboard URL to extract UID and slug
     parsed_url = urlparse(grafana_dashboard_url)
@@ -37,7 +37,7 @@ def send_dashboard_image_to_slack(grafana_dashboard_url):
 
     # Set up headers for authentication (if needed)
     headers = {}
-    GRAFANA_API_KEY = os.environ.get("GRAFANA_API_KEY")
+    GRAFANA_API_KEY = os.getenv("GRAFANA_API_KEY")
     if GRAFANA_API_KEY:
         headers["Authorization"] = f"Bearer {GRAFANA_API_KEY}"
 
@@ -52,7 +52,7 @@ def send_dashboard_image_to_slack(grafana_dashboard_url):
     # Upload the image to Slack using files.upload
     try:
         response = client.files_upload(
-            channels=os.environ["SLACK_CHANNEL_ID"],
+            channels=os.getenv("SLACK_CHANNEL_ID"),
             file=image_data,
             filename="dashboard.png",
             filetype="png",
