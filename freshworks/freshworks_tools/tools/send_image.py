@@ -27,6 +27,7 @@ def generate_grafana_render_url(grafana_dashboard_url):
     render_url = f"{parsed_url.scheme}://{parsed_url.netloc}/render/d/{dashboard_uid}/{dashboard_slug}"
     return render_url
 
+grafana_dashboard_url = os.environ["grafana_dashboard_url"]
 render_url = generate_grafana_render_url(grafana_dashboard_url)
 print(render_url)
 '""",
