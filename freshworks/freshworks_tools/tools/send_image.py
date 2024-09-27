@@ -18,7 +18,7 @@ import argparse
 
 def send_dashboard_image_to_slack(grafana_dashboard_url):
     # Initialize Slack client
-    client = WebClient(token=os.getenv("SLACK_API_KEY"))
+    client = WebClient(token=os.getenv("SLACK_API_TOKEN"))
 
     # Parse the Grafana dashboard URL to extract UID and slug
     parsed_url = urlparse(grafana_dashboard_url)
