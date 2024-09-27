@@ -32,7 +32,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Generate the render URL for a Grafana dashboard")
     parser.add_argument("grafana_dashboard_url", type=str, help="URL of the Grafana dashboard to generate the render URL for")
     args = parser.parse_args()
-    render_url = generate_grafana_render_url(args.grafana_dashboard_url)
+    render_url = generate_grafana_render_url(os.environ["grafana_dashboard_url"])
     print(render_url)
 '""",
     args=[
