@@ -11,18 +11,17 @@ import sys
 from urllib.parse import urlparse, parse_qs
 
 def generate_grafana_render_url(grafana_dashboard_url):
-    # Parse the Grafana dashboard URL to extract UID and slug
+    # Parse the Grafana dashboard URL
     parsed_url = urlparse(grafana_dashboard_url)
     path_parts = parsed_url.path.strip("/").split("/")
 
-    # Ensure that the path contains 'd' followed by UID and slug
     try:
-        if "d" in path_parts:
-            d_index = path_parts.index("d")
-            dashboard_uid = path_parts[d_index + 1]
-            dashboard_slug = path_parts[d_index + 2] if len(path_parts) > d_index + 2 else ""
+        # Check if the path contains the expected segments
+        if len(path_parts) >= 3 and path_parts[0] == "d":
+            dashboard_uid = path_parts[1]
+            dashboard_slug = path_parts[2]
         else:
-            raise ValueError("Missing 'd' segment in the path")
+            raise ValueError("URL path does not have the expected format '/d/{uid}/{slug}'")
 
         # Extract query parameters, if any
         query_params = parse_qs(parsed_url.query)
