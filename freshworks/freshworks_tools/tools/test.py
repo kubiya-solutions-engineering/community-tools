@@ -3,7 +3,7 @@ from .base import FreshworksTool
 from kubiya_sdk.tools.registry import tool_registry
 
 test_tool = FreshworksTool(
-    name="get_grafana_render_url",
+    name="test_tool",
     description="Generate the render URL for a Grafana dashboard",
     content="""
 import os
@@ -42,7 +42,7 @@ print(f"Debug: Received URL -> {grafana_dashboard_url}")
 
 render_url = generate_grafana_render_url(grafana_dashboard_url)
 print(render_url)
-' """,
+""",
     args=[
         Arg(
             name="grafana_dashboard_url",
