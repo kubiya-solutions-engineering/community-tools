@@ -6,6 +6,7 @@ get_grafana_render_url = FreshworksTool(
     name="get_grafana_render_url",
     description="Generate the render URL for a Grafana dashboard",
     content="""
+    echo "grafana_dashboard_url: $grafana_dashboard_url"
     export GRAFANA_DASHBOARD_URL="$grafana_dashboard_url"
     echo "GRAFANA_DASHBOARD_URL: $GRAFANA_DASHBOARD_URL"
     python -c '
