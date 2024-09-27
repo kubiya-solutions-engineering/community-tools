@@ -6,23 +6,23 @@ get_grafana_render_url = FreshworksTool(
     name="get_grafana_render_url",
     description="Generate the render URL for a Grafana dashboard",
     content="""
-# Debug: Print all environment variables to check if grafana_dashboard_url is being set
-echo "Environment variables:"
-printenv
+    # Debug: Print all environment variables to check if grafana_dashboard_url is being set
+    echo "Environment variables:"
+    printenv
 
-# Debug: Print the passed argument to ensure it's available
-if [ -z $grafana_dashboard_url ]; then
-    echo "Error: 'grafana_dashboard_url' is not set or empty"
-else
-    echo "Passed grafana_dashboard_url: $grafana_dashboard_url"
-fi
-
-# Set environment variable
-export GRAFANA_URL=$grafana_dashboard_url
-echo "GRAFANA_URL: $GRAFANA_URL"
-
-# Run the Python script to generate the Grafana render URL
-python -c '
+    # Debug: Print the passed argument to ensure it's available
+    if [ -z $grafana_dashboard_url ]; then
+        echo "Error: 'grafana_dashboard_url' is not set or empty"
+    else
+        echo "Passed grafana_dashboard_url: $grafana_dashboard_url"
+    fi
+    
+    # Set environment variable
+    export GRAFANA_URL=$grafana_dashboard_url
+    echo "GRAFANA_URL: $GRAFANA_URL"
+    
+    # Run the Python script to generate the Grafana render URL
+    python -c '
 import os
 from urllib.parse import urlparse, parse_qs
 
