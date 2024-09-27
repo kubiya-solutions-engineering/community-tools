@@ -6,7 +6,7 @@ from kubiya_sdk.tools.registry import tool_registry
 get_grafana_render_url = FreshworksTool(
     name="get_grafana_render_url",
     description="Generate the render URL for a Grafana dashboard",
-    content="""
+    content="""python -c '
 import os
 from urllib.parse import urlparse
 import argparse
