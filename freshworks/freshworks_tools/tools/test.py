@@ -54,4 +54,4 @@ print(render_url)
 )
 
 # Register the updated tool
-tool_registry.register("freshworks", get_grafana_render_url)
+tool_registry.register("freshworks", test_tool)
