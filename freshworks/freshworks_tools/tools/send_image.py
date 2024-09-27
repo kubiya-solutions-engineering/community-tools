@@ -11,7 +11,11 @@ get_grafana_render_url = FreshworksTool(
     printenv
 
     # Debug: Print the passed argument to ensure it's available
-    echo "grafana_dashboard_url: $grafana_dashboard_url"
+    if [ -z "$grafana_dashboard_url" ]; then
+        echo "Error: 'grafana_dashboard_url' is not set or empty"
+    else
+        echo "Passed grafana_dashboard_url: $grafana_dashboard_url"
+    fi
     
     # Set environment variable
     export GRAFANA_DASHBOARD_URL="$grafana_dashboard_url"
