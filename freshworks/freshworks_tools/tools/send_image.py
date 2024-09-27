@@ -2,12 +2,14 @@ from kubiya_sdk.tools import Arg
 from .base import FreshworksTool
 from kubiya_sdk.tools.registry import tool_registry
 
-
 get_grafana_render_url = FreshworksTool(
     name="get_grafana_render_url",
     description="Generate the render URL for a Grafana dashboard",
-    content="""python -c '
-import sys
+    content="""
+    export GRAFANA_DASHBOARD_URL="$grafana_dashboard_url"
+    echo "GRAFANA_DASHBOARD_URL: $GRAFANA_DASHBOARD_URL"
+    python -c '
+import os
 from urllib.parse import urlparse, parse_qs
 
 def generate_grafana_render_url(grafana_dashboard_url):
@@ -35,15 +37,15 @@ def generate_grafana_render_url(grafana_dashboard_url):
         print(f"Invalid Grafana dashboard URL: {str(e)}")
         exit(1)
 
-# Access the first argument passed to the Python script
-grafana_dashboard_url = sys.argv[1]
+# Access the environment variable
+grafana_dashboard_url = os.environ.get("GRAFANA_DASHBOARD_URL")
 
 # Print the received URL for debugging
 print(f"Debug: Received URL -> {grafana_dashboard_url}")
 
 render_url = generate_grafana_render_url(grafana_dashboard_url)
 print(render_url)
-' "$grafana_dashboard_url" """,
+' """,
     args=[
         Arg(
             name="grafana_dashboard_url",
