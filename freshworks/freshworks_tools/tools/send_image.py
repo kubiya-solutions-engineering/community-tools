@@ -11,6 +11,7 @@ import sys
 from urllib.parse import urlparse, parse_qs
 
 def generate_grafana_render_url(grafana_dashboard_url):
+    print(f"Received Grafana URL: {grafana_dashboard_url}")  # Print the input URL for debugging
     # Parse the Grafana dashboard URL
     parsed_url = urlparse(grafana_dashboard_url)
     path_parts = parsed_url.path.strip("/").split("/")
@@ -36,6 +37,9 @@ def generate_grafana_render_url(grafana_dashboard_url):
 
 # Access the first argument passed to the Python script
 grafana_dashboard_url = sys.argv[1]
+
+# Print the received URL for debugging
+print(f"Debug: Received URL -> {grafana_dashboard_url}")
 
 render_url = generate_grafana_render_url(grafana_dashboard_url)
 print(render_url)
