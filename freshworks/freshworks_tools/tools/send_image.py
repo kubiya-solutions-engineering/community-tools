@@ -15,17 +15,21 @@ def generate_grafana_render_url(grafana_dashboard_url):
     parsed_url = urlparse(grafana_dashboard_url)
     path_parts = parsed_url.path.strip("/").split("/")
 
-    if "d" in path_parts:
-        d_index = path_parts.index("d")
-        dashboard_uid = path_parts[d_index + 1]
-        dashboard_slug = path_parts[d_index + 2] if len(path_parts) > d_index + 2 else ""
-    else:
-        print("Invalid Grafana dashboard URL")
-        exit(1)
+    try:
+        # Ensure that the URL contains the 'd' segment and extract necessary parts
+        if "d" in path_parts:
+            d_index = path_parts.index("d")
+            dashboard_uid = path_parts[d_index + 1]
+            dashboard_slug = path_parts[d_index + 2] if len(path_parts) > d_index + 2 else ""
+        else:
+            raise ValueError("Invalid Grafana dashboard URL")
 
-    # Construct the render URL using the provided Grafana dashboard URL
-    render_url = f"{parsed_url.scheme}://{parsed_url.netloc}/render/d/{dashboard_uid}/{dashboard_slug}"
-    return render_url
+        # Construct the render URL using the provided Grafana dashboard URL
+        render_url = f"{parsed_url.scheme}://{parsed_url.netloc}/render/d/{dashboard_uid}/{dashboard_slug}?orgId=1"
+        return render_url
+    except (IndexError, ValueError) as e:
+        print("Invalid Grafana dashboard URL:", str(e))
+        exit(1)
 
 # Access the first argument passed to the Python script
 grafana_dashboard_url = sys.argv[1]
