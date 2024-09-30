@@ -114,5 +114,5 @@ if __name__ == "__main__":
                     destination="/tmp/script.py",
                     content=script_content,
                 )
-            ],
+            ]
         )
