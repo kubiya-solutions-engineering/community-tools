@@ -16,16 +16,10 @@ get_grafana_image_and_send_slack_thread = FreshworksTool(
     else
         echo "Passed grafana_dashboard_url: $grafana_dashboard_url"
     fi
-
-    if [ -z $thread_ts ]; then
-        echo "Error: 'thread_ts' is not set or empty"
-    else
-        echo "Passed thread_ts: $thread_ts"
-    fi
     
     # Set environment variables
     export GRAFANA_URL=$grafana_dashboard_url
-    export THREAD_TS=$thread_ts
+    export THREAD_TS=$SLACK_THREAD_TS
     echo "GRAFANA_URL: $GRAFANA_URL"
     echo "THREAD_TS: $THREAD_TS"
     
