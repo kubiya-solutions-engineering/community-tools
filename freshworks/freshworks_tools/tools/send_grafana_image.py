@@ -120,14 +120,8 @@ print("Temporary image file removed")
             type="str",
             description="URL of the Grafana dashboard",
             required=True
-        ),
-        Arg(
-            name="thread_ts",
-            type="str",
-            description="The timestamp of the Slack thread to reply to",
-            required=True
         )
-    ],
+    ]
 )
 
 # Register the updated tool
