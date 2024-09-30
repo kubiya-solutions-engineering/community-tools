@@ -6,6 +6,10 @@ get_grafana_image_and_send_slack_thread = FreshworksTool(
     name="get_grafana_image_and_send_slack_thread",
     description="Generate the render URL for a Grafana dashboard, download the image, and send it to the current Slack thread",
     content="""
+    # Debug: Print all environment variables
+    echo "Environment variables:"
+    printenv
+
     # Debug: Print the passed arguments
     if [ -z $grafana_dashboard_url ]; then
         echo "Error: 'grafana_dashboard_url' is not set or empty"
@@ -78,6 +82,15 @@ def send_slack_file_to_thread(token, channel_id, thread_ts, file_path, initial_c
         print(f"Error sending file to Slack thread: {e}")
         raise
 
+def extract_slack_response_info(response):
+    return {
+        "ok": response.get("ok"),
+        "file_id": response.get("file", {}).get("id"),
+        "file_name": response.get("file", {}).get("name"),
+        "file_url": response.get("file", {}).get("url_private"),
+        "timestamp": response.get("file", {}).get("timestamp")
+    }
+
 # Access environment variables
 grafana_dashboard_url = os.environ.get("GRAFANA_URL")
 thread_ts = os.environ.get("SLACK_THREAD_TS")
@@ -95,8 +108,11 @@ image_path = download_grafana_image(render_url, grafana_api_key)
 # Send image to Slack thread
 initial_comment = f"Grafana dashboard image from: {grafana_dashboard_url}"
 slack_response = send_slack_file_to_thread(slack_token, channel_id, thread_ts, image_path, initial_comment)
+
+# Extract relevant information from the Slack response
+response_info = extract_slack_response_info(slack_response)
 print("Slack response:")
-print(json.dumps(slack_response, indent=2))
+print(json.dumps(response_info, indent=2))
 
 # Clean up the downloaded image
 os.remove(image_path)
