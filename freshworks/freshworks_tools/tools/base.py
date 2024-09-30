@@ -22,6 +22,9 @@ def install(package):
 # Install slack_sdk
 install('slack_sdk')
 
+# Install requests
+install('requests')
+
 from slack_sdk import WebClient
 from slack_sdk.errors import SlackApiError
 
