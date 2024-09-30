@@ -3,7 +3,7 @@ import json
 
 SLACK_ICON_URL = "https://a.slack-edge.com/80588/marketing/img/icons/icon_slack_hash_colored.png"
 
-class SlackTool(Tool):
+class FreshworksTool(Tool):
     def __init__(self, name, description, action, args, long_running=False, mermaid_diagram=None):
         env = ["SLACK_API_TOKEN", "GRAFANA_API_KEY", "TOOLS_GH_TOKEN"]
         
