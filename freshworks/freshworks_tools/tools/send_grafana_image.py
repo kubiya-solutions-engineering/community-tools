@@ -2,9 +2,9 @@ from kubiya_sdk.tools import Arg
 from .base import FreshworksTool
 from kubiya_sdk.tools.registry import tool_registry
 
-get_grafana_image_and_send_slack = FreshworksTool(
-    name="get_grafana_image_and_send_slack",
-    description="Generate the render URL for a Grafana dashboard, download the image, and send it to a Slack channel",
+get_grafana_image_and_send_slack_thread = FreshworksTool(
+    name="get_grafana_image_and_send_slack_thread",
+    description="Generate the render URL for a Grafana dashboard, download the image, and send it to the current Slack thread",
     content="""
     # Debug: Print all environment variables
     echo "Environment variables:"
@@ -17,22 +17,22 @@ get_grafana_image_and_send_slack = FreshworksTool(
         echo "Passed grafana_dashboard_url: $grafana_dashboard_url"
     fi
 
-    if [ -z $slack_channel ]; then
-        echo "Error: 'slack_channel' is not set or empty"
+    if [ -z $thread_ts ]; then
+        echo "Error: 'thread_ts' is not set or empty"
     else
-        echo "Passed slack_channel: $slack_channel"
+        echo "Passed thread_ts: $thread_ts"
     fi
     
     # Set environment variables
     export GRAFANA_URL=$grafana_dashboard_url
-    export SLACK_CHANNEL=$slack_channel
+    export THREAD_TS=$thread_ts
     echo "GRAFANA_URL: $GRAFANA_URL"
-    echo "SLACK_CHANNEL: $SLACK_CHANNEL"
+    echo "THREAD_TS: $THREAD_TS"
     
     # Install required Python packages
     pip install requests slack_sdk
 
-    # Run the Python script to generate the Grafana render URL, download the image, and send it to Slack
+    # Run the Python script to generate the Grafana render URL, download the image, and send it to the Slack thread
     python -c '
 import os
 import requests
@@ -74,22 +74,32 @@ def download_grafana_image(render_url, api_key):
         print(f"Failed to download Grafana image. Status code: {response.status_code}")
         raise Exception("Failed to download Grafana image")
 
-def send_slack_file(token, channel, file_path, initial_comment):
+def send_slack_file_to_thread(token, thread_ts, file_path, initial_comment):
     client = WebClient(token=token)
     try:
-        response = client.files_upload(
-            channels=channel,
-            file=file_path,
-            initial_comment=initial_comment
-        )
-        return response
+        # First, we need to get the channel ID from the thread_ts
+        # We'll use conversations_replies to get this information
+        replies = client.conversations_replies(ts=thread_ts)
+        if replies["ok"]:
+            channel_id = replies["channel"]
+            
+            # Now we can upload the file to the thread
+            response = client.files_upload(
+                channels=channel_id,
+                file=file_path,
+                initial_comment=initial_comment,
+                thread_ts=thread_ts
+            )
+            return response
+        else:
+            raise Exception("Failed to get channel information from thread_ts")
     except SlackApiError as e:
-        print(f"Error sending file to Slack: {e}")
+        print(f"Error sending file to Slack thread: {e}")
         raise
 
 # Access environment variables
 grafana_dashboard_url = os.environ.get("GRAFANA_URL")
-slack_channel = os.environ.get("SLACK_CHANNEL")
+thread_ts = os.environ.get("THREAD_TS")
 slack_token = os.environ.get("SLACK_API_TOKEN")
 grafana_api_key = os.environ.get("GRAFANA_API_KEY")
 
@@ -100,9 +110,9 @@ print(f"Generated Grafana render URL: {render_url}")
 # Download Grafana image
 image_path = download_grafana_image(render_url, grafana_api_key)
 
-# Send image to Slack
+# Send image to Slack thread
 initial_comment = f"Grafana dashboard image from: {grafana_dashboard_url}"
-slack_response = send_slack_file(slack_token, slack_channel, image_path, initial_comment)
+slack_response = send_slack_file_to_thread(slack_token, thread_ts, image_path, initial_comment)
 print("Slack response:")
 print(json.dumps(slack_response, indent=2))
 
@@ -118,13 +128,13 @@ print("Temporary image file removed")
             required=True
         ),
         Arg(
-            name="slack_channel",
+            name="thread_ts",
             type="str",
-            description="The Slack channel to send the message to",
+            description="The timestamp of the Slack thread to reply to",
             required=True
         )
     ],
 )
 
 # Register the updated tool
-tool_registry.register("freshworks", get_grafana_image_and_send_slack)
+tool_registry.register("freshworks", get_grafana_image_and_send_slack_thread)
