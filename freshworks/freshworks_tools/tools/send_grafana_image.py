@@ -19,9 +19,9 @@ get_grafana_image_and_send_slack_thread = FreshworksTool(
     
     # Set environment variables
     export GRAFANA_URL=$grafana_dashboard_url
-    export THREAD_TS=$SLACK_THREAD_TS
     echo "GRAFANA_URL: $GRAFANA_URL"
-    echo "THREAD_TS: $THREAD_TS"
+    echo "THREAD_TS: $SLACK_THREAD_TS"
+    echo "CHANNEL_ID: $SLACK_CHANNEL_ID"
     
     # Install required Python packages
     pip install requests slack_sdk
@@ -45,7 +45,7 @@ def generate_grafana_render_url(grafana_dashboard_url):
             dashboard_uid = path_parts[1]
             dashboard_slug = path_parts[2]
         else:
-            raise ValueError("URL path does not have the expected format '/d/{uid}/{slug}'")
+            raise ValueError("URL path does not have the expected format /d/{uid}/{slug}")
 
         query_params = parse_qs(parsed_url.query)
         org_id = query_params.get("orgId", ["1"])[0]
@@ -68,32 +68,24 @@ def download_grafana_image(render_url, api_key):
         print(f"Failed to download Grafana image. Status code: {response.status_code}")
         raise Exception("Failed to download Grafana image")
 
-def send_slack_file_to_thread(token, thread_ts, file_path, initial_comment):
+def send_slack_file_to_thread(token, channel_id, thread_ts, file_path, initial_comment):
     client = WebClient(token=token)
     try:
-        # First, we need to get the channel ID from the thread_ts
-        # We'll use conversations_replies to get this information
-        replies = client.conversations_replies(ts=thread_ts)
-        if replies["ok"]:
-            channel_id = replies["channel"]
-            
-            # Now we can upload the file to the thread
-            response = client.files_upload(
-                channels=channel_id,
-                file=file_path,
-                initial_comment=initial_comment,
-                thread_ts=thread_ts
-            )
-            return response
-        else:
-            raise Exception("Failed to get channel information from thread_ts")
+        response = client.files_upload_v2(
+            channel=channel_id,
+            file=file_path,
+            initial_comment=initial_comment,
+            thread_ts=thread_ts
+        )
+        return response
     except SlackApiError as e:
         print(f"Error sending file to Slack thread: {e}")
         raise
 
 # Access environment variables
 grafana_dashboard_url = os.environ.get("GRAFANA_URL")
-thread_ts = os.environ.get("THREAD_TS")
+thread_ts = os.environ.get("SLACK_THREAD_TS")
+channel_id = os.environ.get("SLACK_CHANNEL_ID")
 slack_token = os.environ.get("SLACK_API_TOKEN")
 grafana_api_key = os.environ.get("GRAFANA_API_KEY")
 
@@ -106,7 +98,7 @@ image_path = download_grafana_image(render_url, grafana_api_key)
 
 # Send image to Slack thread
 initial_comment = f"Grafana dashboard image from: {grafana_dashboard_url}"
-slack_response = send_slack_file_to_thread(slack_token, thread_ts, image_path, initial_comment)
+slack_response = send_slack_file_to_thread(slack_token, channel_id, thread_ts, image_path, initial_comment)
 print("Slack response:")
 print(json.dumps(slack_response, indent=2))
 
