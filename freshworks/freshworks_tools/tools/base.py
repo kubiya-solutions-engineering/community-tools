@@ -14,16 +14,12 @@ import subprocess
 import sys
 import os
 import json
-import requests
 
 def install(package):
     subprocess.check_call([sys.executable, "-m", "pip", "install", package])
 
 # Install slack_sdk
 install('slack_sdk')
-
-# Install requests
-install('requests')
 
 from slack_sdk import WebClient
 from slack_sdk.errors import SlackApiError
