@@ -3,7 +3,7 @@ from .base import FreshworksTool
 from kubiya_sdk.tools.registry import tool_registry
 
 # Slack Upload File Tool
-slack_upload_file = FreshworksTool(
+get_grafana_render_url = FreshworksTool(
     name="slack_upload_file",
     description="Upload a rendered Grafana image to a Slack channel",
     action="files_upload_v2",
@@ -14,4 +14,4 @@ slack_upload_file = FreshworksTool(
 )
 
 # Register the updated tool
-tool_registry.register("freshworks", slack_upload_file)
+tool_registry.register("freshworks", get_grafana_render_url)
