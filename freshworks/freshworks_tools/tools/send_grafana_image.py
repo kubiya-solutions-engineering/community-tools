@@ -20,7 +20,7 @@ get_grafana_image_and_send_slack_thread = FreshworksTool(
     echo "CHANNEL_ID: $SLACK_CHANNEL_ID"
     
     # Install required Python packages
-    pip install requests slack_sdk
+    pip install -q requests slack_sdk
 
     # Run the Python script to generate the Grafana render URL, download the image, and send it to the Slack thread
     python -c '
