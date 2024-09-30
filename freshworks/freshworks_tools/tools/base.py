@@ -4,7 +4,8 @@ SLACK_ICON_URL = "https://a.slack-edge.com/80588/marketing/img/icons/icon_slack_
 
 class FreshworksTool(Tool):
     def __init__(self, name, description, content, args, long_running=False, thread_context=False, mermaid_diagram=None):
-        secrets = ["GRAFANA_API_KEY", "TOOLS_GH_TOKEN", "SLACK_API_TOKEN", "SLACK_THREAD_TS"]
+        secrets = ["GRAFANA_API_KEY", "TOOLS_GH_TOKEN", "SLACK_API_TOKEN"]
+        env = ["SLACK_THREAD_TS", "SLACK_CHANNEL_ID"]
 
         super().__init__(
             name=name,
@@ -15,6 +16,7 @@ class FreshworksTool(Tool):
             content=content,
             args=args,
             secrets=secrets,
+            env=env,
             long_running=long_running,
             mermaid_diagram=mermaid_diagram
         )
