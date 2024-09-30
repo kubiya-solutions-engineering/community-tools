@@ -6,10 +6,6 @@ get_grafana_image_and_send_slack_thread = FreshworksTool(
     name="get_grafana_image_and_send_slack_thread",
     description="Generate the render URL for a Grafana dashboard, download the image, and send it to the current Slack thread",
     content="""
-    # Debug: Print all environment variables
-    echo "Environment variables:"
-    printenv
-
     # Debug: Print the passed arguments
     if [ -z $grafana_dashboard_url ]; then
         echo "Error: 'grafana_dashboard_url' is not set or empty"
